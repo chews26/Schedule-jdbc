@@ -87,7 +87,6 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     // RowMapper는 JDBC에서 사용되는 인터페이스
     // 데이터베이스에서 조회된 ResultSet의 각 행을 원하는 객체 타입으로 매핑할 때 사용
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
-
         return new RowMapper<ScheduleResponseDto>() {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -105,9 +104,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         };
     }
     private RowMapper<Schedule> scheduleRowMapperV2() {
-
         return new RowMapper<Schedule>() {
-
             @Override
             public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new Schedule(

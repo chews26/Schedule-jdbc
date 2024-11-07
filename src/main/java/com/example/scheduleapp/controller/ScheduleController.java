@@ -50,8 +50,6 @@ public class ScheduleController {
     }
 
     // 일정 수정
-    // TODO : LV2구현 수정 시 비밀번호 입력구현 필요
-    // TODO : 할일, 작성자명만 수정가능?
     @PutMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id, @RequestBody ScheduleRequestDto dto
@@ -60,5 +58,6 @@ public class ScheduleController {
     }
 
     // 일정 삭제
+
 }
 
