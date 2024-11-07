@@ -40,6 +40,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", schedule.getTitle());
         parameters.put("name", schedule.getName());
+        parameters.put("password", schedule.getPassword()); // password 추가..
         parameters.put("creation_date", Timestamp.valueOf(schedule.getCreationDate()));// creation_date 추가
         parameters.put("revision_date", Timestamp.valueOf(revisionDate));
         parameters.put("start_datetime", Timestamp.valueOf(schedule.getStartDateTime()));
@@ -61,7 +62,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     // 일정 전체 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
-        return jdbcTemplate.query("select * from schedule", scheduleRowMapper());
+        return jdbcTemplate.query("SELECT id, title, name, creation_date, revision_date, start_datetime, end_datetime, description FROM schedule", scheduleRowMapper());
     }
 
     // 일정 세부 조회
@@ -113,6 +114,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
                         rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("name"),
+                        rs.getString("password"),
                         rs.getTimestamp("creation_date").toLocalDateTime(),
                         rs.getTimestamp("revision_date").toLocalDateTime(),
                         rs.getTimestamp("start_datetime").toLocalDateTime(),

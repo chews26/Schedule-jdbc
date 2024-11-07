@@ -25,7 +25,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto requestDto) {
 
-        Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getName(), requestDto.getStartDateTime(), requestDto.getEndDateTime(), requestDto.getDescription());
+        Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getName(), requestDto.getPassword(), requestDto.getStartDateTime(), requestDto.getEndDateTime(), requestDto.getDescription());
 
         return scheduleRepository.saveSchedule(schedule);
     }
@@ -46,10 +46,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     // 일정 수정
     @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, String title, String name, LocalDateTime startDateTime, LocalDateTime endDateTime, String description) {
+    public ScheduleResponseDto updateSchedule(Long id, String title, String name, String password, LocalDateTime startDateTime, LocalDateTime endDateTime, String description) {
         LocalDateTime revisionDate = LocalDateTime.now();
 
-        if (title == null || name == null || startDateTime == null || endDateTime == null) {
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+
+        if(!schedule.getName().equals(name) || !schedule.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "invalid name Or password");
+        }
+
+        if (title == null || name == null || password == null|| startDateTime == null || endDateTime == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "required values");
         }
 
@@ -58,9 +64,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (updateRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found");
         }
-
-        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
-        return new ScheduleResponseDto(schedule);
+        Schedule updatedSchedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+        return new ScheduleResponseDto(updatedSchedule);
     }
 
     // 일정 삭제
