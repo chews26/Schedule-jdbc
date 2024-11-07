@@ -3,6 +3,7 @@ package com.example.scheduleapp.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Schedule {
 
+    @Setter
     private Long id;
     private String title;
     private String name; // day2 추가 작성자
@@ -19,12 +21,15 @@ public class Schedule {
     private LocalDateTime endDateTime;
     private String description;
 
+
     public Schedule(String title, String name, LocalDateTime startDateTime, LocalDateTime endDateTime, String description) {
         this.title = title;
         this.name = name;
+        this.creationDate = LocalDateTime.now(); // 현재 시간으로 설정
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.description = description;
-        this.creationDate = LocalDateTime.now(); // 현재 시간으로 설정
+
     }
+
 }

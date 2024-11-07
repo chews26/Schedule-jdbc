@@ -34,6 +34,7 @@ public class ScheduleResponseDto {
         this.title = schedule.getTitle();
         this.name = schedule.getName();
         this.creationDate = schedule.getCreationDate();
+        this.revisionDate = schedule.getRevisionDate();
         this.startDateTime = schedule.getStartDateTime();
         this.endDateTime = schedule.getEndDateTime();
         this.description = schedule.getDescription();

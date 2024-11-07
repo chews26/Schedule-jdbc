@@ -25,10 +25,12 @@ public class ScheduleController {
         this.scheduleService = scheduleService;
     }
 
-    // 일정 게시 컨드롤러
+    // 일정 게시 컨트롤러
     @PostMapping // HTTP POST 요청 처리 메서드
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
     }
+
+    // 일정 전체 조회 컨트롤러
 }
 
