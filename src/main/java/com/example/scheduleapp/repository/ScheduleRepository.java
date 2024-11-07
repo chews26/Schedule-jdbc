@@ -14,7 +14,7 @@ public interface ScheduleRepository {
     // 일정 전체 조회
     List<ScheduleResponseDto> findAllSchedules();
 
-    // TODO : 일정 세부 조회
+    // 일정 세부 조회
     Schedule findScheduleByIdOrElseThrow(long id);
 
     // TODO : 일정 수정

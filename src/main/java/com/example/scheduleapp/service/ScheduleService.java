@@ -13,8 +13,8 @@ public interface ScheduleService {
     // 일정 전체 조회
     List<ScheduleResponseDto> findAllSchedules();
 
-    // TODO : 일정 세부 조회
-    ScheduleResponseDto findScheduleById(String id);
+    // 일정 세부 조회
+    ScheduleResponseDto findScheduleById(Long id);
 
     // TODO : 일정 변경
     ScheduleResponseDto updateSchedule(ScheduleRequestDto dto);

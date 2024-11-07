@@ -25,21 +25,26 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleRepository.saveSchedule(schedule);
     }
 
+    // 일정 전체 조회
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
         return scheduleRepository.findAllSchedules();
     }
 
+    // 일정 세부 조회
     @Override
-    public ScheduleResponseDto findScheduleById(String id) {
-        return null;
+    public ScheduleResponseDto findScheduleById(Long id) {
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+        return new ScheduleResponseDto(schedule);
     }
 
+    // 일정 수정
     @Override
     public ScheduleResponseDto updateSchedule(ScheduleRequestDto dto) {
         return null;
     }
 
+    // 일정 삭제
     @Override
     public void deleteSchedule(String id) {
 

@@ -2,11 +2,13 @@ package com.example.scheduleapp.repository;
 
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -61,16 +63,20 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return jdbcTemplate.query("select * from schedule", scheduleRowMapper());
     }
 
+    // 일정 세부 조회
     @Override
     public Schedule findScheduleByIdOrElseThrow(long id) {
-        return null;
+        List<Schedule> result = jdbcTemplate.query("select * from schedule where id=?", scheduleRowMapperV2(), id);
+        return result.stream().findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id));
     }
 
+    // 일정 수정
     @Override
     public int updateSchedule(Long id, String title, String name, LocalDateTime startDate, LocalDateTime endDate, String description) {
         return 0;
     }
 
+    // 일정 삭제
     @Override
     public int deleteSchedule(Long id) {
         return 0;
@@ -84,6 +90,25 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
             @Override
             public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new ScheduleResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("name"),
+                        rs.getTimestamp("creation_date").toLocalDateTime(),
+                        rs.getTimestamp("revision_date").toLocalDateTime(),
+                        rs.getTimestamp("start_datetime").toLocalDateTime(),
+                        rs.getTimestamp("end_datetime").toLocalDateTime(),
+                        rs.getString("description")
+                );
+            }
+        };
+    }
+    private RowMapper<Schedule> scheduleRowMapperV2() {
+
+        return new RowMapper<Schedule>() {
+
+            @Override
+            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Schedule(
                         rs.getLong("id"),
                         rs.getString("title"),
                         rs.getString("name"),
