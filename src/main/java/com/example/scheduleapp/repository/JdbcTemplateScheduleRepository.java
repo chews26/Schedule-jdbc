@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,15 +31,22 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", schedule.getTitle());
-        parameters.put("start_datetime", Timestamp.valueOf(schedule.getStartDateTime())); // LocalDatetiem -> DATETIME -> String형식에는 어떻게..?
+        parameters.put("name", schedule.getName());
+        parameters.put("creation_date", Timestamp.valueOf(schedule.getCreationDate())); // creation_date 추가
+        parameters.put("start_datetime", Timestamp.valueOf(schedule.getStartDateTime()));
         parameters.put("end_datetime", Timestamp.valueOf(schedule.getEndDateTime()));
         parameters.put("description", schedule.getDescription());
 
+
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+
 
         return new ScheduleResponseDto(
                 key.longValue(),
                 schedule.getTitle(),
+                schedule.getName(),
+                schedule.getCreationDate(),
+                schedule.getEndDateTime(),
                 schedule.getStartDateTime(),
                 schedule.getEndDateTime(),
                 schedule.getDescription());

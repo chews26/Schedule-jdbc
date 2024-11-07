@@ -9,11 +9,14 @@ import java.time.LocalDateTime;
 public class ScheduleRequestDto {
 
     private String title;
+    private String name; // day2 추가
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDateTime;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDateTime;
-    private String description;
 
+    private String description;
 }
 
