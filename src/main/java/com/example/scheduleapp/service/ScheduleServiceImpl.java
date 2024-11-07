@@ -4,8 +4,13 @@ import com.example.scheduleapp.dto.ScheduleRequestDto;
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
 import com.example.scheduleapp.repository.ScheduleRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.beans.Transient;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,9 +44,23 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     // 일정 수정
+    @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(ScheduleRequestDto dto) {
-        return null;
+    public ScheduleResponseDto updateSchedule(Long id, String title, String name, LocalDateTime startDateTime, LocalDateTime endDateTime, String description) {
+        LocalDateTime revisionDate = LocalDateTime.now();
+
+        if (title == null || name == null || startDateTime == null || endDateTime == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "required values");
+        }
+
+        int updateRow = scheduleRepository.updateSchedule(id, title, name, revisionDate, startDateTime, endDateTime, description);
+
+        if (updateRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found");
+        }
+
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+        return new ScheduleResponseDto(schedule);
     }
 
     // 일정 삭제

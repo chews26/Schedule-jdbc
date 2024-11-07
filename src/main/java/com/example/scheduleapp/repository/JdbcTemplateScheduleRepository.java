@@ -35,12 +35,13 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         // INSERT Query 직접 작성하지 않아도 된다.
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("id");
+        LocalDateTime revisionDate = LocalDateTime.now();
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", schedule.getTitle());
         parameters.put("name", schedule.getName());
         parameters.put("creation_date", Timestamp.valueOf(schedule.getCreationDate()));// creation_date 추가
-        parameters.put("revision_date", Timestamp.valueOf(schedule.getCreationDate()));
+        parameters.put("revision_date", Timestamp.valueOf(revisionDate));
         parameters.put("start_datetime", Timestamp.valueOf(schedule.getStartDateTime()));
         parameters.put("end_datetime", Timestamp.valueOf(schedule.getEndDateTime()));
         parameters.put("description", schedule.getDescription());
@@ -72,8 +73,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
     // 일정 수정
     @Override
-    public int updateSchedule(Long id, String title, String name, LocalDateTime startDate, LocalDateTime endDate, String description) {
-        return 0;
+    public int updateSchedule(Long id, String title, String name, LocalDateTime revisionDate, LocalDateTime startDate, LocalDateTime endDate, String description) {
+        return jdbcTemplate.update("update schedule set title=?, name=?, revision_date=?, start_datetime=?, end_datetime=?, description=? where id=?", title, name, revisionDate, startDate, endDate, description, id);
     }
 
     // 일정 삭제

@@ -17,8 +17,8 @@ public interface ScheduleRepository {
     // 일정 세부 조회
     Schedule findScheduleByIdOrElseThrow(long id);
 
-    // TODO : 일정 수정
-    int updateSchedule(Long id, String title, String name, LocalDateTime startDate, LocalDateTime endDate, String description);
+    // 일정 수정
+    int updateSchedule(Long id, String title, String name, LocalDateTime revisionDate, LocalDateTime startDate, LocalDateTime endDate, String description);
 
     // TODO : 일정 삭제
     int deleteSchedule(Long id);
