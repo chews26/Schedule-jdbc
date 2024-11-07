@@ -16,5 +16,10 @@ public class ScheduleRequestDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDateTime;
     private String description;
+
+    public ScheduleRequestDto(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }
 

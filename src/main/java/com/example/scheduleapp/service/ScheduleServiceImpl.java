@@ -81,7 +81,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     // 일정 삭제
     @Override
-    public void deleteSchedule(Long id) {
+    public void deleteSchedule(Long id, String name, String password) {
+
+        // 데이터베이스 id 값을 가져옴
+        Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
+
+        // 이름이랑 비밀번호 불일치시 예외 반환
+        if(!schedule.getName().equals(name) || !schedule.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "invalid name Or password");
+        }
+
         int deleteRow = scheduleRepository.deleteSchedule(id);
 
         if (deleteRow == 0) {

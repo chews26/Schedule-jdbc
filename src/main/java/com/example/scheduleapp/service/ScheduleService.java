@@ -20,7 +20,6 @@ public interface ScheduleService {
     // 일정 변경
     ScheduleResponseDto updateSchedule(Long id, String title, String name, String password, LocalDateTime startDateTime, LocalDateTime endDateTime, String description);
 
-    // TODO : 일정 삭제
-    void deleteSchedule(Long id);
-
+    // 일정 삭제
+    void deleteSchedule(Long id, String name, String password);
 }
