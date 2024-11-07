@@ -35,6 +35,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         // INSERT Query 직접 작성하지 않아도 된다.
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("id");
+
+        // 일정 등록시 revisionDate를 현재시간으로 설정
         LocalDateTime revisionDate = LocalDateTime.now();
 
         Map<String, Object> parameters = new HashMap<>();
@@ -50,6 +52,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
 
         // jdbcInsert.executeAndReturnKey는 SimpleJdbcInsert의 메서드로, 데이터베이스에 데이터를 삽입하면서 자동으로 생성된 기본 키(Primary Key) 값을 반환하는 역할
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+
         // Schedule 객체의 id 필드에 자동 생성된 기본 키 값을 설정하는 코드
         // key.longValue() 호출: Number 타입으로 반환된 기본 키 값은 longValue() 메서드를 통해 Long 타입으로 변환
         // schedule.setId(key.longValue());는 Schedule 객체의 id 필드에 key.longValue() 값을 설정하여, Schedule 객체가 데이터베이스에 저장된 레코드의 기본 키 값을 가지게 함
@@ -81,11 +84,17 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
     // 일정 삭제
     @Override
     public int deleteSchedule(Long id) {
-        return 0;
+        return jdbcTemplate.update("delete from schedule where id=?", id);
     }
 
     // RowMapper는 JDBC에서 사용되는 인터페이스
     // 데이터베이스에서 조회된 ResultSet의 각 행을 원하는 객체 타입으로 매핑할 때 사용
+
+    // <<트러블슈팅 >>
+    // 문제 : password가 매핑되지 않거나 아래 RowMapper에 둘다 선언할 경우 password가 빈값으로 반환되는 문제
+    // 해결 방법 :
+    // scheduleRowMapper의 경우 ScheduleResponseDto에 결과값을 반환하므로 password값을 반환해서는 안된다.
+    // 만약 password값이랑 매핑이 필요할 경우 scheduleRowMapperV2를 사용하여 결과값으로 반환되지 않도록 사용해야한다.
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
         return new RowMapper<ScheduleResponseDto>() {
             @Override

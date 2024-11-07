@@ -81,7 +81,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     // 일정 삭제
     @Override
-    public void deleteSchedule(String id) {
+    public void deleteSchedule(Long id) {
+        int deleteRow = scheduleRepository.deleteSchedule(id);
 
+        if (deleteRow == 0) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found id = " + id);
+        }
     }
 }

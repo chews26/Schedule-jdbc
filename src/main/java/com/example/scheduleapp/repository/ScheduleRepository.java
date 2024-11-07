@@ -20,6 +20,6 @@ public interface ScheduleRepository {
     // 일정 수정
     int updateSchedule(Long id, String title, String name, LocalDateTime revisionDate, LocalDateTime startDate, LocalDateTime endDate, String description);
 
-    // TODO : 일정 삭제
+    // 일정 삭제
     int deleteSchedule(Long id);
 }
