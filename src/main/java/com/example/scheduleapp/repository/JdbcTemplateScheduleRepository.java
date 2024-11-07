@@ -3,14 +3,18 @@ package com.example.scheduleapp.repository;
 import com.example.scheduleapp.dto.ScheduleResponseDto;
 import com.example.scheduleapp.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -22,6 +26,7 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    // 일정 등록
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
 
@@ -32,7 +37,8 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("title", schedule.getTitle());
         parameters.put("name", schedule.getName());
-        parameters.put("creation_date", Timestamp.valueOf(schedule.getCreationDate())); // creation_date 추가
+        parameters.put("creation_date", Timestamp.valueOf(schedule.getCreationDate()));// creation_date 추가
+        parameters.put("revision_date", Timestamp.valueOf(schedule.getCreationDate()));
         parameters.put("start_datetime", Timestamp.valueOf(schedule.getStartDateTime()));
         parameters.put("end_datetime", Timestamp.valueOf(schedule.getEndDateTime()));
         parameters.put("description", schedule.getDescription());
@@ -48,4 +54,47 @@ public class JdbcTemplateScheduleRepository implements ScheduleRepository {
         return new ScheduleResponseDto(schedule);
 
     }
+
+    // 일정 전체 조회
+    @Override
+    public List<ScheduleResponseDto> findAllSchedules() {
+        return jdbcTemplate.query("select * from schedule", scheduleRowMapper());
+    }
+
+    @Override
+    public Schedule findScheduleByIdOrElseThrow(long id) {
+        return null;
+    }
+
+    @Override
+    public int updateSchedule(Long id, String title, String name, LocalDateTime startDate, LocalDateTime endDate, String description) {
+        return 0;
+    }
+
+    @Override
+    public int deleteSchedule(Long id) {
+        return 0;
+    }
+
+    // RowMapper는 JDBC에서 사용되는 인터페이스
+    // 데이터베이스에서 조회된 ResultSet의 각 행을 원하는 객체 타입으로 매핑할 때 사용
+    private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
+
+        return new RowMapper<ScheduleResponseDto>() {
+            @Override
+            public ScheduleResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new ScheduleResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("title"),
+                        rs.getString("name"),
+                        rs.getTimestamp("creation_date").toLocalDateTime(),
+                        rs.getTimestamp("revision_date").toLocalDateTime(),
+                        rs.getTimestamp("start_datetime").toLocalDateTime(),
+                        rs.getTimestamp("end_datetime").toLocalDateTime(),
+                        rs.getString("description")
+                );
+            }
+        };
+    }
+
 }

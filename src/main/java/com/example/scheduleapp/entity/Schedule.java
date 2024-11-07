@@ -26,6 +26,7 @@ public class Schedule {
         this.title = title;
         this.name = name;
         this.creationDate = LocalDateTime.now(); // 현재 시간으로 설정
+        this.revisionDate = LocalDateTime.now();
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.description = description;
