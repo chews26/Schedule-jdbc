@@ -46,7 +46,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     // 일정 수정
     @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, String title, String name, String password, LocalDateTime startDateTime, LocalDateTime endDateTime, String description) {
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto dto) {
         // 수정할 경우 수정일자 현재 시각으로 재설정
         LocalDateTime revisionDate = LocalDateTime.now();
 
@@ -54,17 +54,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule schedule = scheduleRepository.findScheduleByIdOrElseThrow(id);
 
         // 이름이랑 비밀번호 불일치시 예외 반환
-        if(!schedule.getName().equals(name) || !schedule.getPassword().equals(password)) {
+        if(!schedule.getName().equals(dto.getName()) || !schedule.getPassword().equals(dto.getPassword())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "invalid name Or password");
         }
 
         // null 값을 경우 예외 반환
-        if (title == null || name == null || password == null|| startDateTime == null || endDateTime == null) {
+        if (dto.getTitle() == null || dto.getName() == null || dto.getPassword() == null|| dto.getStartDateTime() == null || dto.getEndDateTime() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "required values");
         }
 
         // 수정 된 값 업데이트
-        int updateRow = scheduleRepository.updateSchedule(id, title, name, revisionDate, startDateTime, endDateTime, description);
+        int updateRow = scheduleRepository.updateSchedule(id, dto.getTitle(), dto.getName(), revisionDate, dto.getStartDateTime(), dto.getEndDateTime(), dto.getDescription());
 
         // 데이터베이스에서 일정 업데이트 작업이 제대로 수행되지 않을 경우 예외 반환
         if (updateRow == 0) {
