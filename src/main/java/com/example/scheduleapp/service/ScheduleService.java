@@ -18,7 +18,7 @@ public interface ScheduleService {
     ScheduleResponseDto findScheduleById(Long id);
 
     // 일정 변경
-    ScheduleResponseDto updateSchedule(Long id, String title, String name, String password, LocalDateTime startDateTime, LocalDateTime endDateTime, String description);
+    ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto dto);
 
     // 일정 삭제
     void deleteSchedule(Long id, String name, String password);

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/schedules")
 public class ScheduleController {
 
     /*
@@ -32,7 +32,6 @@ public class ScheduleController {
     }
 
     // 일정 게시 컨트롤러
-
     @PostMapping // HTTP POST 요청 처리 메서드
     public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto dto) {
         return new ResponseEntity<>(scheduleService.saveSchedule(dto), HttpStatus.CREATED);
@@ -45,22 +44,22 @@ public class ScheduleController {
     }
 
     // 일정 세부 조회
-    @GetMapping("/{id}")
+    @GetMapping("/schedule/{id}")
     public ResponseEntity<ScheduleResponseDto> findScheduleById(@PathVariable Long id) {
         return new ResponseEntity<>(scheduleService.findScheduleById(id), HttpStatus.OK);
     }
 
     // 일정 수정
-    @PutMapping("/{id}")
+    @PutMapping("/schedule/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto dto
     ) {
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto.getTitle(), dto.getName(), dto.getPassword(), dto.getStartDateTime(), dto.getEndDateTime(), dto.getDescription()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, dto), HttpStatus.OK);
     }
 
     // 일정 삭제
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/schedule/{id}")
     public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto dto
