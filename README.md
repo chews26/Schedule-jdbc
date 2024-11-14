@@ -1,7 +1,7 @@
 # 📆 JDBC 일정관리 앱 📆
 ### [💻 JDBC 일정관리 앱 만들기 작성 내용 바로가기 ](https://github.com/chews26/Schedule-app/tree/main/src/main/java/com/example/scheduleapp)
 ### [📓 JDBC 일정관리 앱 만들기 작성 노션 바로가기](https://shinelee26.notion.site/_-12e86ea33f94807cb131f8bcd0feb95d?pvs=4)
-### [🏠 JDBC 일정관리 앱 만들기 작성 블로그 바로가기](https://shinelee26.tistory.com/tag/spring%20%EC%9D%BC%EC%A0%95%EA%B4%80%EB%A6%AC%EC%95%B1)
+### [🏠 JDBC 일정관리 앱 만들기 작성 블로그 바로가기](https://shinelee26.tistory.com/tag/spring%20jdbc%20%EC%9D%BC%EC%A0%95%EA%B4%80%EB%A6%AC%EC%95%B1)
 
 ## API 명세서
 ![스크린샷 2024-11-07 205815](https://github.com/user-attachments/assets/2e8f02e9-440e-45c0-9038-f301fa188b1c)
